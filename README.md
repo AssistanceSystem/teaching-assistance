@@ -8,7 +8,7 @@
 
 ## Get Started
 
-* Clone all files from this repository.( https://github.com/Max-Hu/week7.git )
+* Clone all files from this repository.(https://github.com/AssistanceSystem/teaching-assistance.git)
 * Recommend using Intellij IDEA 15 (ULTIMATE) for IDE.
 * Execute "build.gradle" to initialize this project environment at beginning.
 * Run this project with your local tomcat server .
