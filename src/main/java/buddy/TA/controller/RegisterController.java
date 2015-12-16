@@ -9,11 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,29 +29,44 @@ public class RegisterController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "create", method = RequestMethod.POST, produces = "application/json")
-    public String createUser ( @RequestBody JSONObject jsonObj, HttpServletResponse response){
+    public RegisterController(){
+    }
+
+    public RegisterController(UserService userService){
+        this.userService = userService;
+    }
+
+    @RequestMapping(value = "create", method = RequestMethod.POST)
+    public void createUser ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
         User user = new User(jsonObj.getString("loginName"),
                 jsonObj.getString("name"),
                 jsonObj.getString("password"));
         userService.registerUser(user);
-        return userService.findByLoginName(jsonObj.getString("loginName")).toString();
+        try{
+            response.getWriter().write("{\"response\" : \"success\" }");
+        }catch (IOException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+//        return userService.findByLoginName(jsonObj.getString("loginName")).toString();
     }
 
 
-    private void renderData(HttpServletResponse response, String data) {
-        PrintWriter printWriter = null;
-        try {
-            printWriter = response.getWriter();
-            printWriter.print(data);
-        } catch (IOException ex) {
-            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (null != printWriter) {
-                printWriter.flush();
-                printWriter.close();
+    @RequestMapping(value = "check", method = RequestMethod.POST)
+    public void checkLoginName ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
+        String loginName = jsonObj.getString("loginName");
+        User user = userService.findByLoginName(loginName);
+        try{
+            if (user == null){
+                response.getWriter().write("{\"response\" : \"success\" }");
+             }else {
+                response.getWriter().write("{\"response\" : \"error\" }");
             }
+        }catch (IOException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+
         }
+//        return userService.findByLoginName(jsonObj.getString("loginName")).toString();
     }
 
     private HttpServletRequest encodingData(HttpServletRequest request) {

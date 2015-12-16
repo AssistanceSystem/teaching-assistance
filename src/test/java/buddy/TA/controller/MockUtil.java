@@ -5,6 +5,7 @@ package buddy.TA.controller;
  */
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -27,14 +28,14 @@ public class MockUtil {
      * @throws UnsupportedEncodingException
      * @throws Exception
      */
-    public static String mock(MockMvc mvc, String uri, String json)
+    public static void mock(MockMvc mvc, String uri, String json)
             throws UnsupportedEncodingException, Exception {
-        return mvc
-                .perform(
-                        post(uri).characterEncoding("UTF-8")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(json.getBytes())).andReturn()
-                .getResponse().getContentAsString();
+         mvc.perform(post(uri).characterEncoding("UTF-8")
+                 .contentType(MediaType.APPLICATION_JSON)
+                 .content(json.getBytes()))
+                 .andExpect(content().json("{\"response\" : \"success\" }"));
+//                .andReturn()
+//                .getResponse().getContentAsString();
     }
 
 }
