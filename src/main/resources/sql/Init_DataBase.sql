@@ -1,6 +1,6 @@
 CREATE SCHEMA `teaching_assistance` ;
-drop table if exists user_login;
 
+drop table if exists user_login;
 CREATE TABLE user_login(
   id bigint auto_increment,
 	login_name varchar(64) not null unique,
