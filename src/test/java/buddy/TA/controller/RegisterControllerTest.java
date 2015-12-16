@@ -15,28 +15,17 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.junit.Assert.assertEquals;
 /**
  * Created by zhihu on 15/12/15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TeachingAssistanceApplication.class)
 public class RegisterControllerTest {
-
-    private String json ="{\"loginName\":\"Jim\",\"name\":\"user1\",\"password\":\"1234\"}";
-
-//    @Autowired
-//    private WebApplicationContext wac;
-
-//    private MockMvc mockMvc;
-
-//    @Before
-//    public void setup() {
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-//    }
-
 
     @Autowired
     private RegisterController registerController;
@@ -53,22 +42,35 @@ public class RegisterControllerTest {
 
 
     @Test
-    public void validate_get_address() throws Exception {
-//        MockUtil.mock(this.mockMvc, "/register/create", json);
-//        assertEquals("success", re);
-        mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
+    public void checkLoginNameTest() throws Exception {
+        String json ="{\"loginName\":\"max\"}";
+        MvcResult result = mockMvc.perform(post("/register/check").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
-                .andExpect(
-                        content()
-                                .json("{\"response\" : \"success\" }"));
+                .andReturn();
+        assertEquals(result.getResponse().getContentAsString(),"failed");
+
+
+    }
+
+    @Test
+    public void createUserTest() throws Exception {
+        String json ="{\"loginName\":\"Jim\",\"name\":\"user1\",\"password\":\"1234\"}";
+        MvcResult result = mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.getBytes()))
+                .andReturn();
+        assertEquals(result.getResponse().getContentAsString(),"success");
+
 
     }
 
     @After
     public void deleteData(){
         User user = userService.findByLoginName("Jim");
-        userService.deleteUser(user.getId());
+        if (user != null){
+            userService.deleteUser(user.getId());
+        }
     }
 
 

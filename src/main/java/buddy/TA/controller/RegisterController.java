@@ -37,35 +37,37 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public void createUser ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
+    @ResponseBody
+    public String createUser ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
         User user = new User(jsonObj.getString("loginName"),
                 jsonObj.getString("name"),
                 jsonObj.getString("password"));
-        userService.registerUser(user);
-        try{
-            response.getWriter().write("{\"response\" : \"success\" }");
-        }catch (IOException ex) {
-            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
 
-        }
-//        return userService.findByLoginName(jsonObj.getString("loginName")).toString();
+            userService.registerUser(user);
+            return "success";
     }
 
 
     @RequestMapping(value = "check", method = RequestMethod.POST)
-    public void checkLoginName ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
+    @ResponseBody
+    public String checkLoginName ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
         String loginName = jsonObj.getString("loginName");
         User user = userService.findByLoginName(loginName);
-        try{
-            if (user == null){
-                response.getWriter().write("{\"response\" : \"success\" }");
-             }else {
-                response.getWriter().write("{\"response\" : \"error\" }");
-            }
-        }catch (IOException ex) {
-            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
-
+        if (user == null){
+            return "success";
+        }else {
+            return "failed";
         }
+//        try{
+//            if (user == null){
+//                response.getWriter().write("{\"response\" : \"success\" }");
+//             }else {
+//                response.getWriter().write("{\"response\" : \"error\" }");
+//            }
+//        }catch (IOException ex) {
+//            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+//
+//        }
 //        return userService.findByLoginName(jsonObj.getString("loginName")).toString();
     }
 
