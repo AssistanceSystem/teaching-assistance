@@ -1,4 +1,4 @@
-package buddy.TA.data;
+package buddy.TA.service;
 
 import buddy.TA.TeachingAssistanceApplication;
 import buddy.TA.entity.User;

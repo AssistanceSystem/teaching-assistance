@@ -42,27 +42,63 @@ public class RegisterControllerTest {
 
 
     @Test
-    public void checkLoginNameTest() throws Exception {
+    public void checkUsedLoginNameTest() throws Exception {
         String json ="{\"loginName\":\"max\"}";
         MvcResult result = mockMvc.perform(post("/register/check").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals(result.getResponse().getContentAsString(),"failed");
-
-
+        assertEquals("failed",result.getResponse().getContentAsString());
     }
 
     @Test
-    public void createUserTest() throws Exception {
-        String json ="{\"loginName\":\"Jim\",\"name\":\"user1\",\"password\":\"1234\"}";
+    public void checkUnusedLoginNameTest() throws Exception {
+        String json ="{\"loginName\":\"tom\"}";
+        MvcResult result = mockMvc.perform(post("/register/check").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.getBytes()))
+                .andReturn();
+        assertEquals("success",result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void successCreateUserTest() throws Exception {
+        String json ="{\"loginName\":\"Jim@163.com\",\"name\":\"user1\",\"password\":\"123456\"}";
         MvcResult result = mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals(result.getResponse().getContentAsString(),"success");
+        assertEquals("success",result.getResponse().getContentAsString());
+    }
 
+    @Test
+    public void loginNameErrorCreateUserTest() throws Exception {
+        String json ="{\"loginName\":\"Jim\",\"name\":\"user1\",\"password\":\"123456\"}";
+        MvcResult result = mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.getBytes()))
+                .andReturn();
+        assertEquals("loginName illegal",result.getResponse().getContentAsString());
+    }
 
+    @Test
+    public void passwordShortErrorCreateUserTest() throws Exception {
+        String json ="{\"loginName\":\"Jim@163.com\",\"name\":\"user1\",\"password\":\"1234\"}";
+        MvcResult result = mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.getBytes()))
+                .andReturn();
+        assertEquals("password illegal",result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void passwordLongErrorCreateUserTest() throws Exception {
+        String json ="{\"loginName\":\"Jim@163.com\",\"name\":\"user1\",\"password\":\"12345678901234567890\"}";
+        MvcResult result = mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.getBytes()))
+                .andReturn();
+        assertEquals("password illegal",result.getResponse().getContentAsString());
     }
 
     @After

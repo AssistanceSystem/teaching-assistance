@@ -16,15 +16,15 @@ import java.util.Arrays;
 public class TeachingAssistanceApplication {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(TeachingAssistanceApplication.class, args);
-
-        System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-        String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
-            System.out.println(beanName);
-        }
-//        SpringApplication.run(TeachingAssistanceApplication.class, args);
+//        ApplicationContext ctx = SpringApplication.run(TeachingAssistanceApplication.class, args);
+//
+//        System.out.println("Let's inspect the beans provided by Spring Boot:");
+//
+//        String[] beanNames = ctx.getBeanDefinitionNames();
+//        Arrays.sort(beanNames);
+//        for (String beanName : beanNames) {
+//            System.out.println(beanName);
+//        }
+        SpringApplication.run(TeachingAssistanceApplication.class, args);
     }
 }
