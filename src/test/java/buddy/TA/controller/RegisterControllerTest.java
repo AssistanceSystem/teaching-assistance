@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 import buddy.TA.TeachingAssistanceApplication;
 import buddy.TA.entity.User;
 import buddy.TA.service.UserService;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +50,9 @@ public class RegisterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals("failed",result.getResponse().getContentAsString());
+        String response = result.getResponse().getContentAsString();
+        JSONObject data = JSONObject.fromObject(response);
+        assertEquals("failed",data.get("message"));
     }
 
     @Test
@@ -58,7 +62,9 @@ public class RegisterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals("success",result.getResponse().getContentAsString());
+        String response = result.getResponse().getContentAsString();
+        JSONObject data = JSONObject.fromObject(response);
+        assertEquals("success",data.get("message"));
     }
 
     @Test
@@ -68,7 +74,9 @@ public class RegisterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals("success",result.getResponse().getContentAsString());
+        String response = result.getResponse().getContentAsString();
+        JSONObject data = JSONObject.fromObject(response);
+        assertEquals("success",data.get("message"));
     }
 
     @Test
@@ -78,7 +86,9 @@ public class RegisterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals("loginName illegal",result.getResponse().getContentAsString());
+        String response = result.getResponse().getContentAsString();
+        JSONObject data = JSONObject.fromObject(response);
+        assertEquals("loginName illegal",data.get("message"));
     }
 
     @Test
@@ -88,7 +98,9 @@ public class RegisterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals("password illegal",result.getResponse().getContentAsString());
+        String response = result.getResponse().getContentAsString();
+        JSONObject data = JSONObject.fromObject(response);
+        assertEquals("password illegal",data.get("message"));
     }
 
     @Test
@@ -98,12 +110,14 @@ public class RegisterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))
                 .andReturn();
-        assertEquals("password illegal",result.getResponse().getContentAsString());
+        String response = result.getResponse().getContentAsString();
+        JSONObject data = JSONObject.fromObject(response);
+        assertEquals("password illegal",data.get("message"));
     }
 
     @After
     public void deleteData(){
-        User user = userService.findByLoginName("Jim");
+        User user = userService.findByLoginName("Jim@163.com");
         if (user != null){
             userService.deleteUser(user.getId());
         }
