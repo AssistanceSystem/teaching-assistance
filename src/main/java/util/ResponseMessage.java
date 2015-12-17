@@ -46,10 +46,10 @@ public class ResponseMessage {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"status\":\"" + status + '\"' +
-                ", \"message\":\"" + message + '\"' +
-                ", \"data\":\"" + data + '\"' +
-                '}';
+        return "{"
+                + "\"status\":\"" + status + '\"'
+                + ", \"message\":\"" + message + '\"'
+                + ", \"data\":\"" + data + '\"'
+                + '}';
     }
 }

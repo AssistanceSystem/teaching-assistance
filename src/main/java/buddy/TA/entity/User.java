@@ -2,7 +2,11 @@ package buddy.TA.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "user_login")
-public class User implements Serializable{
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -30,7 +34,8 @@ public class User implements Serializable{
     private Date registerDate;
 
 
-    public User() { }
+    public User() {
+    }
 
     public User(String loginName, String name, String password) {
         this.loginName = loginName;
@@ -38,7 +43,7 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    @JsonFormat (pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     public Date getRegisterDate() {
         return registerDate;
     }
@@ -81,12 +86,10 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "{" +
-                "\"id\":\"" + id +
-                "\", \"loginName\":\"" + loginName + "\"" +
-                ", \"name\":\"" + name + "\"" +
-                ", \"password\":\"" + password + "\"" +
-                ", \"registerDate\":\"" + registerDate +
-                "\"}";
+        return "{\"id\":\"" + id
+                + "\", \"loginName\":\"" + loginName
+                + "\", \"name\":\"" + name
+                + "\", \"password\":\"" + password
+                + "\", \"registerDate\":\"" + registerDate + "\"}";
     }
 }

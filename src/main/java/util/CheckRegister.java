@@ -6,18 +6,13 @@ package util;
 public class CheckRegister {
 
 
-    public static boolean checkLoginName(String loginName){
-//        String EMAIL_VERIFY = "/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+.([a-zA-Z0-9_-])+/";
-        String EMAIL_VERIFY = "\\p{Alpha}\\w{2,15}[@][a-z0-9]{3,}[.]\\p{Lower}{2,}";
-        return loginName.matches(EMAIL_VERIFY);
+    public static boolean checkLoginName(String loginName) {
+        final String emailVerify = "\\p{Alpha}\\w{2,15}[@][a-z0-9]{3,}[.]\\p{Lower}{2,}";
+        return loginName.matches(emailVerify);
 
     }
 
-    public static boolean checkPasswordLength(String password){
-        if (password.length()<=16 && password.length()>=6){
-            return true;
-        }else {
-            return false;
-        }
+    public static boolean checkPasswordLength(String password) {
+        return password.length() <= 16 && password.length() >= 6;
     }
 }

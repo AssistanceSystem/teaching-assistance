@@ -3,15 +3,15 @@ package util;
 /**
  * Created by zhihu on 15/12/14.
  */
+
 import java.util.Date;
 
 /**
  * 日期提供者，使用它而不是直接取得系统时间，方便测试。
- *
  */
 public interface Clock {
 
-    static final Clock DEFAULT = new DefaultClock();
+    Clock DEFAULT = new DefaultClock();
 
     Date getCurrentDate();
 
@@ -90,5 +90,4 @@ public interface Clock {
             time -= millis;
         }
     }
-
 }
