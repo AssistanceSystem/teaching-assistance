@@ -20,6 +20,15 @@ $(function() {
       $('.wrong-email').css('display', 'inline');
       $email.pass = false;
     }
+
+    if($email.pass) {
+      $.ajax({
+        method: 'post',
+        url: 'register/check',
+      }).done(function(data){
+        console.log(data);
+      })
+    }
   }
 
   function changePasswordStatus(password) {
@@ -75,3 +84,12 @@ $(function() {
     }
   });
 });
+
+/*
+ * localhost:8080/register/create
+ *{
+ "loginName":"sadf@qwer.com",
+ "password": "12345678",
+ "name": "li"
+ }
+ * */
