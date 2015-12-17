@@ -56,10 +56,10 @@ public class RegisterController {
         String password = jsonObj.getString("password");
         if (!CheckRegister.checkLoginName(loginName)){
             responseMessage = new ResponseMessage(BadRequest,LoginNameIllegal);
-            return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.OK);
         }else if (!CheckRegister.checkPasswordLength(password)){
             responseMessage = new ResponseMessage(BadRequest,PasswordIllegal);
-            return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.OK);
         }else {
             User user = new User(loginName,name,password);
             userService.registerUser(user);
@@ -68,8 +68,8 @@ public class RegisterController {
         }
     }
 
-
-    @RequestMapping(value = "check", method = RequestMethod.GET)
+//TODO check used loginName
+    @RequestMapping(value = "check", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> checkLoginName ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
         String loginName = jsonObj.getString("loginName");
@@ -80,7 +80,7 @@ public class RegisterController {
             return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.OK);
         }else {
             responseMessage = new ResponseMessage(BadRequest,Failed);
-            return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(responseMessage.toString(),HttpStatus.OK);
         }
     }
 
