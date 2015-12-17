@@ -69,7 +69,7 @@ public class RegisterController {
     }
 
 
-    @RequestMapping(value = "check", method = RequestMethod.POST)
+    @RequestMapping(value = "check", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> checkLoginName ( HttpServletResponse response,@RequestBody JSONObject jsonObj){
         String loginName = jsonObj.getString("loginName");
