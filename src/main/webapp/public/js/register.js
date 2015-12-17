@@ -1,7 +1,8 @@
 $(function() {
   var $email = $('#email'),
       $password = $('#password'),
-      $passwordConfirm = $('#passwordConfirm');
+      $passwordConfirm = $('#passwordConfirm'),
+      $nickname = $('#nickname');
 
   function verifyEmail(email) {
     var EMAIL_VERIFY = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
@@ -23,11 +24,23 @@ $(function() {
 
     if($email.pass) {
       $.ajax({
-        method: 'post',
-        url: 'register/check',
-      }).done(function(data){
-        console.log(data);
-      })
+        url: "/register/check",
+        type: "POST",
+        dataType: 'json',
+        contentType: "application/json",
+        data: JSON.stringify({
+          loginName: email
+        }),
+        complete: function(data) {
+          if (data.responseJSON.status == 200){
+            $('.email-exist').hide();
+            $('.email-exist').data('exist', false);
+          }else {
+            $('.email-exist').show();
+            $('.email-exist').data('exist', true);
+          }
+        }
+      });
     }
   }
 
@@ -70,26 +83,36 @@ $(function() {
   });
 
   function isPass() {
-    return $email.pass && $password.pass && $passwordConfirm.pass;
+    var isEmailExist = $('.email-exist').data('exist');
+    return !isEmailExist && $email.pass && $password.pass && $passwordConfirm.pass;
   }
 
   $('#register').on('click', function() {
     changeEmailStatus($email.val());
     changePasswordStatus($password.val());
     checkPasswordConfirm();
+
     if (isPass()) {
-      console.log('验证通过');
+      $.ajax({
+        url: "/register/create",
+        type: "POST",
+        dataType: 'json',
+        contentType: "application/json",
+        data: JSON.stringify({
+          loginName: $email.val(),
+          password: $password.val(),
+          name: $nickname.val()
+        }),
+        complete: function(data) {
+          if (data.responseJSON.status == 200){
+            console.log('注册成功');
+          }else{
+            console.log(data.responseJSON.message);
+          }
+        }
+      });
     }else {
       console.log('验证不通过');
     }
   });
 });
-
-/*
- * localhost:8080/register/create
- *{
- "loginName":"sadf@qwer.com",
- "password": "12345678",
- "name": "li"
- }
- * */
