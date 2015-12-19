@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import util.CheckRegister;
 import util.ResponseMessage;
+import util.ResponseMessageCreator;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +37,7 @@ public class RegisterController {
 
     private static final String LOGIN_NAME_ILLEGAL = "loginName illegal";
     private static final String PASSWORD_ILLEGAL = "password illegal";
+    private static final String LOGIN_NAME_EXIST = "LoginName Exist";
     private static final String SUCCESS = "success";
     private static final String FAILED = "failed";
     private static final String OK_CODE = "200";
@@ -49,32 +51,31 @@ public class RegisterController {
         String name = jsonObj.getString("name");
         String password = jsonObj.getString("password");
         if (!CheckRegister.checkLoginName(loginName)) {
-            responseMessage = new ResponseMessage(BAD_REQUEST_CODE, LOGIN_NAME_ILLEGAL);
-            return new ResponseEntity<String>(responseMessage.toString(), HttpStatus.OK);
+            return ResponseMessageCreator.createResponse(BAD_REQUEST_CODE, LOGIN_NAME_ILLEGAL, HttpStatus.OK);
+        } else if (checkLoginNameExist(loginName)) {
+            return ResponseMessageCreator.createResponse(BAD_REQUEST_CODE, LOGIN_NAME_EXIST, HttpStatus.OK);
         } else if (!CheckRegister.checkPasswordLength(password)) {
-            responseMessage = new ResponseMessage(BAD_REQUEST_CODE, PASSWORD_ILLEGAL);
-            return new ResponseEntity<String>(responseMessage.toString(), HttpStatus.OK);
+            return ResponseMessageCreator.createResponse(BAD_REQUEST_CODE, PASSWORD_ILLEGAL, HttpStatus.OK);
         } else {
             User user = new User(loginName, name, password);
             userService.registerUser(user);
-            responseMessage = new ResponseMessage(OK_CODE, SUCCESS);
-            return new ResponseEntity<String>(responseMessage.toString(), HttpStatus.OK);
+            return ResponseMessageCreator.createResponse(OK_CODE, SUCCESS, HttpStatus.OK);
         }
     }
 
-    //TODO check used loginName
     @RequestMapping(value = "check", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> checkLoginName(HttpServletResponse response, @RequestBody JSONObject jsonObj) {
         String loginName = jsonObj.getString("loginName");
-        User user = userService.findByLoginName(loginName);
-        ResponseMessage responseMessage;
-        if (user == null) {
-            responseMessage = new ResponseMessage(OK_CODE, SUCCESS);
-            return new ResponseEntity<String>(responseMessage.toString(), HttpStatus.OK);
+        if (!checkLoginNameExist(loginName)) {
+            return ResponseMessageCreator.createResponse(OK_CODE, SUCCESS, HttpStatus.OK);
         } else {
-            responseMessage = new ResponseMessage(BAD_REQUEST_CODE, FAILED);
-            return new ResponseEntity<String>(responseMessage.toString(), HttpStatus.OK);
+            return ResponseMessageCreator.createResponse(BAD_REQUEST_CODE, FAILED, HttpStatus.OK);
         }
+    }
+
+    public boolean checkLoginNameExist(String loginName) {
+        return userService.findByLoginName(loginName) != null;
+
     }
 }

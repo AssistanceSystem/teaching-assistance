@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 @ComponentScan
 @EnableAutoConfiguration
-public final class TeachingAssistanceApplication {
+public class TeachingAssistanceApplication {
     public static void main(String[] args) {
         SpringApplication.run(TeachingAssistanceApplication.class, args);
     }

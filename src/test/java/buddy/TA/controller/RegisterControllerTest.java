@@ -86,7 +86,7 @@ public class RegisterControllerTest {
 
     @Test
     public void passwordShortErrorCreateUserTest() throws Exception {
-        String json = "{\"loginName\":\"Jim@163.com\",\"name\":\"user1\",\"password\":\"1234\"}";
+        String json = "{\"loginName\":\"username@yahoo.corporate.in\",\"name\":\"user1\",\"password\":\"1234\"}";
         MvcResult result = mockMvc.perform(post("/register/create").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getBytes()))

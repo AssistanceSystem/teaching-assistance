@@ -7,7 +7,8 @@ public class CheckRegister {
 
 
     public static boolean checkLoginName(String loginName) {
-        final String emailVerify = "\\p{Alpha}\\w{2,15}[@][a-z0-9]{3,}[.]\\p{Lower}{2,}";
+        final String emailVerify =
+                "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         return loginName.matches(emailVerify);
 
     }
